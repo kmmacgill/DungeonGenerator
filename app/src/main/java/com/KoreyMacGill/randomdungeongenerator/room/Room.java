@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Room {
     private String id;
-    private String parentID;
+    private Room parent;
     private String title;
     private String description;
     private List<Room> connectedRooms;
@@ -14,8 +14,8 @@ public class Room {
         this.connectedRooms = new ArrayList<>();
     }
 
-    public Room(String parentID) {
-        this.parentID = parentID;
+    public Room(Room par) {
+        this.parent = par;
         this.connectedRooms = new ArrayList<>();
     }
 
@@ -27,8 +27,8 @@ public class Room {
         return this.connectedRooms.isEmpty();
     }
 
-    public String getParentID() {
-        return parentID;
+    public Room getParentID() {
+        return this.parent;
     }
 
     public void setParentID(String parentID) {
