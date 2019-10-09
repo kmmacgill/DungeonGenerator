@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Room {
-    private int ID;
+    private String id;
+    private String parentID;
     private String title;
     private String description;
     private List<Room> connectedRooms;
@@ -13,12 +14,29 @@ public class Room {
         this.connectedRooms = new ArrayList<>();
     }
 
-    public int getID() {
-        return ID;
+    public Room(String parentID) {
+        this.parentID = parentID;
+        this.connectedRooms = new ArrayList<>();
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public String getId() {
+        return id;
+    }
+
+    public Boolean hasKids() {
+        return this.connectedRooms.isEmpty();
+    }
+
+    public String getParentID() {
+        return parentID;
+    }
+
+    public void setParentID(String parentID) {
+        parentID = parentID;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -39,6 +57,10 @@ public class Room {
 
     public List<Room> getConnectedRooms() {
         return connectedRooms;
+    }
+
+    public void addChildRoom(Room room) {
+        this.connectedRooms.add(room);
     }
 
     public void setConnectedRooms(List<Room> connectedRooms) {
