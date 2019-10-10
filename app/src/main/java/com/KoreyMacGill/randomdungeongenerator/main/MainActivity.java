@@ -20,21 +20,26 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.generateDungeonButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Room roomtoShowOnScreen = generateDungeon(2, "Origin");//was thinking we could use a key word for knowing we're at the start.
+                Room roomtoShowOnScreen = generateDungeon(2, new Room());
             }
         });
     }
 
-    public Room generateDungeon(int numbOfKids, String parentId){
+    public Room generateDungeon(int possibleChancesToGenerateAConnection, Room par){
         //phase 0. get a room
-        Room currentRoom = new Room(parentId);
-        //phase 1. generate the other rooms this room is connected to
-        for (int i = 0; i < numbOfKids; i++){
-            if ((Math.random() * 100 + numbOfKids) < 25) //25% ish chance of adding a child.
-            currentRoom.addChildRoom(this.generateDungeon(numbOfKids -1, currentRoom.getId()));
+        Room currentRoom = new Room(par);
+        //phase 1. possibly generate the other rooms this room is connected to
+        for (int i = 0; i < possibleChancesToGenerateAConnection; i++){
+            if ((Math.random() * 100) < 50) //50% chance of adding a child.
+            currentRoom.addChildRoom(this.generateDungeon(possibleChancesToGenerateAConnection -1, currentRoom));
         }
-        //phase 2. establish uncle connections
+        //the above sets up the entire tree. getting all of the nodes built out. now it's time to make other connections besides parent/child.
+
+        //phase 2. create uncle/sibling connections
         //todo:make awesomeness
+
+        //phase 3. create random "secret" connections to other rooms, this is more at random.
+        //todo:make more awesomeness
         return currentRoom;
     }
 }
