@@ -36,10 +36,19 @@ public class MainActivity extends AppCompatActivity {
         //the above sets up the entire tree. getting all of the nodes built out. now it's time to make other connections besides parent/child.
 
         //phase 2. create uncle/sibling connections
-        //todo:make awesomeness
+
 
         //phase 3. create random "secret" connections to other rooms, this is more at random.
-        //todo:make more awesomeness
+        //--------------
+        //notes for myself.
+        //break this into 3 phases. 3 functions. call those functions within this one.
+        //phases have stayed the same more or less.
+        //phase 1. use random number as "chance" and have it fluctuate based on koko's suggestion to make it more natural
+        //phase 2 do the same more or less, experiment with it. but use that same fluctuating method to ensure we have
+        //connections built.
+        //phase 3 is about the same.
+        //USE BREADTH FIRST SEARCH! not depth. skews the connections too much otherwise.
+        //TODO: READ ABOVE AND DO IT
         return currentRoom;
     }
 }
