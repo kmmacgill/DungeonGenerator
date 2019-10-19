@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RandomDungeonGenerator</string>
+    <string name="random_Button">Generate Dungeon</string>
+    <string name="clear_Button">Clear Text</string>
 </resources>

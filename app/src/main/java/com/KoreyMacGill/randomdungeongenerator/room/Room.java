@@ -2,6 +2,7 @@ package com.KoreyMacGill.randomdungeongenerator.room;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Room {
     private String id;
@@ -16,6 +17,7 @@ public class Room {
 
     public Room(Room par) {
         this.parent = par;
+        this.id = "Room " + new Random().nextInt(1000);
         this.connectedRooms = new ArrayList<>();
     }
 
@@ -27,12 +29,12 @@ public class Room {
         return this.connectedRooms.isEmpty();
     }
 
-    public Room getParentID() {
+    public Room getParent() {
         return this.parent;
     }
 
-    public void setParentID(String parentID) {
-        parentID = parentID;
+    public void setParent(Room parent) {
+        this.parent = parent;
     }
 
     public void setId(String id) {

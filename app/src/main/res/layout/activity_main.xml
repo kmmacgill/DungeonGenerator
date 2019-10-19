@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
     tools:context=".main.MainActivity">
 
     <Button
-        android:id="@+id/generateDungeonButton"
+        android:id="@+id/GenerateDungeonButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate Dungeon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:text="@string/random_Button"
+    />
 
     <EditText
-        android:id="@+id/editText"
-        android:layout_width="395dp"
-        android:layout_height="682dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:text="testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123 testing testing 123"
-        app:layout_constraintBottom_toTopOf="@+id/generateDungeonButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:id="@+id/outPut"
+        android:layout_centerVertical="true"
+        android:text=""
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/GenerateDungeonButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    />
+</RelativeLayout>
