@@ -21,7 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
     private int chanceToGenerateConnection;
 
-    private List<Room> queue;
+    private List<Room> traversalQueue;
+    //private List<Room> connectionQueue;
+
+    private List<Room> theDungeon;
 
     private String theDungeonString;
 
@@ -36,7 +39,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         theDungeonString = "";
         numberCounter = 0;
-        queue = new ArrayList<>();
+
+        theDungeon = new ArrayList<>();
+
+        traversalQueue = new ArrayList<>();
+        //connectionQueue = new ArrayList<>();
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
 
@@ -67,8 +74,10 @@ public class MainActivity extends AppCompatActivity {
                 origin.setId("Out");
                 origin.setDescription("You're out! hopefully it's better than back inside...");
                 Room theDungeon = generateDungeon(chanceToGenerateConnection, origin);
-                origin.addChildRoom(theDungeon);
-                addToQueue(origin);
+                //addToQueue(connectionQueue, theDungeon);
+                //assembleConnections();
+                origin.addConnectedRoom(theDungeon);
+                addToQueue(traversalQueue, origin);
                 outputNotationToScreen();
                 populateCardView(theDungeon);
             }
@@ -87,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         layout.removeAllViews();
 
         //now let's add a button for going back the way we were before unless we're in the origin room (aka outside the dungeon)
-        if (room.getId() != "Out") {
+        if (!room.getId().equals("Out")) {
             final Room wayBack = room;
             Button wayBackBtn = new Button(this);
             wayBackBtn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -133,14 +142,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void outputNotationToScreen() {
         do {
-            addToTheDungeonString(queue.get(0).getId() + " | ");
-            for (Room i : queue.get(0).getConnectedRooms()) {
-                addToQueue(i);
+            addToTheDungeonString(traversalQueue.get(0).getId() + " | ");
+            for (Room i : traversalQueue.get(0).getConnectedRooms()) {
+                addToQueue(traversalQueue, i);
                 addToTheDungeonString(i.getId() + ", ");
             }
             addToTheDungeonString("\n\r");
-            popQueue();
-        } while (!queue.isEmpty());
+            popQueue(traversalQueue);
+        } while (!traversalQueue.isEmpty());
         addToOutput(theDungeonString);
     }
 
@@ -159,11 +168,11 @@ public class MainActivity extends AppCompatActivity {
         et.getText().clear();
     }
 
-    private void addToQueue(Room room) {
+    private void addToQueue(List<Room> queue, Room room) {
         queue.add(queue.size(), room);
     }
 
-    private void popQueue() {
+    private void popQueue(List<Room> queue) {
         queue.remove(0);
     }
 
@@ -174,9 +183,64 @@ public class MainActivity extends AppCompatActivity {
         Random randomNumber = new Random();
         for (int i = chances; i > 0; i--) {
             if ((randomNumber.nextInt(101) + 1) > 50) {
-                theRoom.addChildRoom(generateDungeon(chances - 1, theRoom));
+                theRoom.addConnectedRoom(generateDungeon(chances - 1, theRoom));
             }
         }
         return theRoom;
     }
+
+//    private void assembleConnections(){
+//        do {
+//            //check current room for possible "normal" connections
+//            Room current = connectionQueue.get(0);
+//            checkForSiblings(current);
+//            checkForUncles(current);
+//            checkForCousins(current);
+//
+//            //for each kid
+//            for (Room i : current.getConnectedRooms()) {
+//                addToQueue(connectionQueue, i);
+//            }
+//            popQueue(connectionQueue);
+//        } while (!connectionQueue.isEmpty());
+//    }
+//
+//    private void checkForSiblings(Room r){
+//        if(!r.getConnectedToSibling()){
+//            Random randomNumber = new Random();
+//            if(r.hasSiblings()) {
+//                for (Room sibling : r.getSiblings()){
+//                    if ((randomNumber.nextInt(101) + 1) > 90) {
+//                        r.addConnectedRoom(sibling);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    private void checkForUncles(Room r) {
+//        if(!r.getConnectedToUncle()) {
+//            Random randomNumber = new Random();
+//            if (r.hasUncles()) {
+//                for (Room sibling : r.getUncles()) {
+//                    if ((randomNumber.nextInt(101) + 1) > 90) {
+//                        r.addConnectedRoom(sibling);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    private void checkForCousins(Room r) {
+//        if(!r.getConnectedtoCousin()) {
+//            Random randomNumber = new Random();
+//            if (r.hasCousins()) {
+//                for (Room sibling : r.getCousins()) {
+//                    if ((randomNumber.nextInt(101) + 1) > 90) {
+//                        r.addConnectedRoom(sibling);
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
