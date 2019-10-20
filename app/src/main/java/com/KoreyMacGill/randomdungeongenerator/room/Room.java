@@ -7,17 +7,18 @@ import java.util.Random;
 public class Room {
     private String id;
     private Room parent;
-    private String title;
     private String description;
     private List<Room> connectedRooms;
 
     public Room() {
+        this.id = "Generate a room";
+        this.description = "Click the generate Dungeon button to begin";
         this.connectedRooms = new ArrayList<>();
     }
 
-    public Room(Room par) {
+    public Room(Room par, String id) {
         this.parent = par;
-        this.id = "Room " + new Random().nextInt(1000);
+        this.id = id;
         this.connectedRooms = new ArrayList<>();
     }
 
@@ -39,14 +40,6 @@ public class Room {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {

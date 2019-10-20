@@ -7,21 +7,32 @@
     tools:context=".main.MainActivity">
 
     <Button
-        android:id="@+id/GenerateDungeonButton"
+        android:id="@+id/generateDungeonButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:text="@string/random_Button"
     />
+    <Button
+        android:id="@+id/swapView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:text="@string/swap_View"
+        />
 
     <EditText
+        android:visibility="gone"
         android:id="@+id/outPut"
         android:layout_centerVertical="true"
         android:text=""
@@ -30,8 +41,52 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_above="@+id/GenerateDungeonButton"
+        android:layout_above="@+id/generateDungeonButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
     />
+
+    <TextView
+        android:id="@+id/roomTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="TEST 123"
+        android:textAlignment="center"
+        android:textSize="30dp"
+    />
+
+    <TextView
+        android:id="@+id/roomDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/roomTitle"
+        android:text="This is a description, this room is going to be described so great here it will be simply amazing. great stuff."
+    />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/generateDungeonButton"
+        android:id="@+id/roomsScroller"
+        >
+
+        <LinearLayout
+            android:id="@+id/RoombuttonsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <!--dynamically created room buttons will go here-->
+
+        </LinearLayout>
+    </HorizontalScrollView>
 </RelativeLayout>
