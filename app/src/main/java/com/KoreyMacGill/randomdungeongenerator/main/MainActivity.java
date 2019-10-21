@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.KoreyMacGill.randomdungeongenerator.R;
 import com.KoreyMacGill.randomdungeongenerator.room.Room;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private int chanceToGenerateConnection;
 
     private List<Room> traversalQueue;
-    //private List<Room> connectionQueue;
+    private List<Room> connectionQueue;
 
     private List<Room> theDungeon;
 
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         theDungeon = new ArrayList<>();
 
         traversalQueue = new ArrayList<>();
-        //connectionQueue = new ArrayList<>();
+        connectionQueue = new ArrayList<>();
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
 
@@ -71,21 +72,23 @@ public class MainActivity extends AppCompatActivity {
                 clearOutput();
                 Room origin = new Room();
                 //TODO: set cool origin things like entrance, etc.
-                origin.setId("Out");
+                origin.setId(0);
+                origin.setTitle("Out");
                 origin.setDescription("You're out! hopefully it's better than back inside...");
-                Room theDungeon = generateDungeon(chanceToGenerateConnection, origin);
-                //addToQueue(connectionQueue, theDungeon);
-                //assembleConnections();
-                origin.addConnectedRoom(theDungeon);
+                theDungeon.add(origin); //position 0 = origin room aka outside
+                origin.addConnectedRoom(generateDungeon(chanceToGenerateConnection, origin));
+                addToQueue(connectionQueue, origin);
+                assembleConnections();
+
                 addToQueue(traversalQueue, origin);
                 outputNotationToScreen();
-                populateCardView(theDungeon);
+                populateCardView(theDungeon.get(1));
             }
         });
     }
 
     private void populateCardView(Room room) {
-        titlebar.setText(room.getId());
+        titlebar.setText(room.getTitle());
         descriptionBox.setText(room.getDescription());
         fillRoomSelector(room);
     }
@@ -96,16 +99,16 @@ public class MainActivity extends AppCompatActivity {
         layout.removeAllViews();
 
         //now let's add a button for going back the way we were before unless we're in the origin room (aka outside the dungeon)
-        if (!room.getId().equals("Out")) {
-            final Room wayBack = room;
+        if (room.getId() != 0) {
+            final Room wayBack = theDungeon.get(room.getParentPosition());
             Button wayBackBtn = new Button(this);
             wayBackBtn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            wayBackBtn.setText(room.getParent().getId());
-            wayBackBtn.setId(0);
+            wayBackBtn.setText(wayBack.getTitle());
+            wayBackBtn.setId(wayBack.getId());
             wayBackBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    populateCardView(wayBack.getParent());
+                    populateCardView(wayBack);
                 }
             });
 
@@ -113,13 +116,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //now let's add a button for going to all the connecting rooms
-        int counter = 1;
-        for (Room r : room.getConnectedRooms()) {
-            final Room thisRoom = r;
+        for (int r : room.getConnectedRooms()) {
+            final Room thisRoom = theDungeon.get(r);
             Button roomBtn = new Button(this);
             roomBtn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            roomBtn.setText(r.getId());
-            roomBtn.setId(counter);
+            roomBtn.setText(thisRoom.getTitle());
+            roomBtn.setId(thisRoom.getId());
             roomBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -128,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
             layout.addView(roomBtn);
-            counter++;
         }
     }
 
@@ -141,13 +142,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void outputNotationToScreen() {
+        List<Integer> roomIdEntries = new ArrayList<>();//the first entry "x |" we don't want to keep repeating x over and over.
         do {
-            addToTheDungeonString(traversalQueue.get(0).getId() + " | ");
-            for (Room i : traversalQueue.get(0).getConnectedRooms()) {
-                addToQueue(traversalQueue, i);
-                addToTheDungeonString(i.getId() + ", ");
+            if(!roomIdEntries.contains(traversalQueue.get(0).getId())){
+                addToTheDungeonString(traversalQueue.get(0).getId() + " | ");
+                for (int i : traversalQueue.get(0).getConnectedRooms()) {
+                    addToQueue(traversalQueue, theDungeon.get(i));
+                    addToTheDungeonString(theDungeon.get(i).getId() + ", ");
+                }
+                addToTheDungeonString("\n\r");
             }
-            addToTheDungeonString("\n\r");
+            roomIdEntries.add(traversalQueue.get(0).getId());
             popQueue(traversalQueue);
         } while (!traversalQueue.isEmpty());
         addToOutput(theDungeonString);
@@ -166,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
     private void clearOutput() {
         theDungeonString = "";
         et.getText().clear();
+        theDungeon.clear();
     }
 
     private void addToQueue(List<Room> queue, Room room) {
@@ -176,71 +182,83 @@ public class MainActivity extends AppCompatActivity {
         queue.remove(0);
     }
 
-    public Room generateDungeon(int chances, Room parent) {
+    public Integer generateDungeon(int chances, Room parent) {
         numberCounter++;
-        String id = "Room " + numberCounter;
-        Room theRoom = new Room(parent, id);
+        int currentNumber = numberCounter;
+        Room theRoom = new Room(parent.getId(), currentNumber);
+        theDungeon.add(theRoom);
         Random randomNumber = new Random();
         for (int i = chances; i > 0; i--) {
-            if ((randomNumber.nextInt(101) + 1) > 50) {
+            if ((randomNumber.nextInt(101) + 1) > 40) {
                 theRoom.addConnectedRoom(generateDungeon(chances - 1, theRoom));
             }
         }
-        return theRoom;
+        return currentNumber;
     }
 
-//    private void assembleConnections(){
-//        do {
-//            //check current room for possible "normal" connections
-//            Room current = connectionQueue.get(0);
-//            checkForSiblings(current);
-//            checkForUncles(current);
-//            checkForCousins(current);
-//
-//            //for each kid
-//            for (Room i : current.getConnectedRooms()) {
-//                addToQueue(connectionQueue, i);
-//            }
-//            popQueue(connectionQueue);
-//        } while (!connectionQueue.isEmpty());
-//    }
-//
-//    private void checkForSiblings(Room r){
-//        if(!r.getConnectedToSibling()){
-//            Random randomNumber = new Random();
-//            if(r.hasSiblings()) {
-//                for (Room sibling : r.getSiblings()){
-//                    if ((randomNumber.nextInt(101) + 1) > 90) {
-//                        r.addConnectedRoom(sibling);
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private void checkForUncles(Room r) {
-//        if(!r.getConnectedToUncle()) {
-//            Random randomNumber = new Random();
-//            if (r.hasUncles()) {
-//                for (Room sibling : r.getUncles()) {
-//                    if ((randomNumber.nextInt(101) + 1) > 90) {
-//                        r.addConnectedRoom(sibling);
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private void checkForCousins(Room r) {
-//        if(!r.getConnectedtoCousin()) {
-//            Random randomNumber = new Random();
-//            if (r.hasCousins()) {
-//                for (Room sibling : r.getCousins()) {
-//                    if ((randomNumber.nextInt(101) + 1) > 90) {
-//                        r.addConnectedRoom(sibling);
-//                    }
-//                }
-//            }
-//        }
-//    }
+    private void assembleConnections() {
+        do {
+            //check current room for possible "normal" connections
+            Room current = connectionQueue.get(0);
+
+            //for each kid that CURRENTLY exists. (otherwise they'll grow crazily and take forever/crash app
+            for (int i : current.getConnectedRooms()) {
+                addToQueue(connectionQueue, theDungeon.get(i));
+            }
+
+            checkForSiblings(current);
+            checkForUnclesAndCousins(current);
+
+            popQueue(connectionQueue);
+        } while (!connectionQueue.isEmpty());
+    }
+
+    private void checkForSiblings(Room r) {
+        if(!r.getConnectedToSibling()){
+            Random randomNumber = new Random(); //random #
+            if (theDungeon.get(r.getParentPosition()).getConnectedRooms().size() > 1) { //if the current rooms parent has more than one child
+                for (int child : theDungeon.get(r.getParentPosition()).getConnectedRooms()) { //for each kid
+                    if (child != r.getId()) { //and it isn't itself
+                        if (!theDungeon.get(child).getConnectedToSibling()) { //and the other room isn't already connected to another sibling
+                            if ((randomNumber.nextInt(101) + 1) > 50) {
+                                r.addConnectedRoom(child);//add it maybe
+                                r.setConnectedToSibling(true);
+                                theDungeon.get(child).setConnectedToSibling(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkForUnclesAndCousins(Room r) {
+        if(!r.getConnectedToUncle()) {
+            Random randomNumber = new Random();
+            if (theDungeon.get(theDungeon.get(r.getParentPosition()).getParentPosition()).getConnectedRooms().size() > 1) { //if the current rooms G parent has more than 1 kid
+                for (int uncle : theDungeon.get(theDungeon.get(r.getParentPosition()).getParentPosition()).getConnectedRooms()) {//for each of those children
+                    if (uncle != r.getParentPosition()) { //and it's not your parent
+                        if(!theDungeon.get(uncle).getConnectedToNephew()){
+                            if ((randomNumber.nextInt(101) + 1) > 70) {
+                                r.addConnectedRoom(uncle);//maybe add it.
+                                r.setConnectedToUncle(true);
+                                theDungeon.get(uncle).setConnectedToNephew(true);
+                            }
+                        }
+                        if(r.getConnectedToCousin()){
+                            for(int cousin : theDungeon.get(uncle).getConnectedRooms()) {
+                                if (!theDungeon.get(cousin).getConnectedToCousin()) {
+                                    if ((randomNumber.nextInt(101) + 1 > 80)) {
+                                        r.addConnectedRoom(cousin);
+                                        r.setConnectedToCousin(true);
+                                        theDungeon.get(cousin).setConnectedToCousin(true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
