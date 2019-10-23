@@ -77,11 +77,19 @@ public class MainActivity extends AppCompatActivity {
                 origin.setDescription("You're out! hopefully it's better than back inside...");
                 theDungeon.add(origin); //position 0 = origin room aka outside
                 origin.addConnectedRoom(generateDungeon(chanceToGenerateConnection, origin));
+
+                addToQueue(traversalQueue, origin);
+                addToTheDungeonString("ORIGINAL\n\r----------\n\r");
+                outputNotationToScreen();
+
                 addToQueue(connectionQueue, origin);
                 assembleConnections();
 
+                traversalQueue.clear();
                 addToQueue(traversalQueue, origin);
+                addToTheDungeonString("Post Connections\n\r----------\n\r");
                 outputNotationToScreen();
+
                 populateCardView(theDungeon.get(1));
             }
         });
@@ -201,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
             //check current room for possible "normal" connections
             Room current = connectionQueue.get(0);
 
-            //for each kid that CURRENTLY exists. (otherwise they'll grow crazily and take forever/crash app
+            //for each kid that CURRENTLY exists. (otherwise queue'll grow crazily and take forever/crash app
             for (int i : current.getConnectedRooms()) {
                 addToQueue(connectionQueue, theDungeon.get(i));
             }
@@ -214,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkForSiblings(Room r) {
-        if(!r.getConnectedToSibling()){
+        if(!r.getConnectedToSibling()){ //if the current room is not connected to a sibling yet
             Random randomNumber = new Random(); //random #
             if (theDungeon.get(r.getParentPosition()).getConnectedRooms().size() > 1) { //if the current rooms parent has more than one child
                 for (int child : theDungeon.get(r.getParentPosition()).getConnectedRooms()) { //for each kid
