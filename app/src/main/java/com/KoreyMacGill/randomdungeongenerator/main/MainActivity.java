@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             if (theDungeon.get(r.getParentPosition()).getConnectedRooms().size() > 1) { //if the current rooms parent has more than one child
                 for (int child : theDungeon.get(r.getParentPosition()).getConnectedRooms()) { //for each kid
                     if (child != r.getId()) { //and it isn't itself
-                        if (!theDungeon.get(child).getConnectedToSibling()) { //and the other room isn't already connected to another sibling
+                        if ((!theDungeon.get(child).getConnectedToSibling()) && (!r.getConnectedToSibling())) { //check the room hasn't connected yet, and the other room isn't already connected to another sibling
                             if ((randomNumber.nextInt(101) + 1) > 50) {
                                 r.addConnectedRoom(child);//add it maybe
                                 r.setConnectedToSibling(true);
