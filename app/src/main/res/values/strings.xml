@@ -3,4 +3,8 @@
     <string name="random_Button">Generate Dungeon</string>
     <string name="clear_Button">Clear Text</string>
     <string name="swap_View">Swap View</string>
+    <string name="settings">Settings</string>
+    <string name="numberOfConnections">Max Connections per room</string>
+    <string name="secretConnections">Number Of Secret Passages</string>
+    <string name="levels">Complexity of Dungeon\n(higher number = more)</string>
 </resources>

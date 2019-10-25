@@ -14,10 +14,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:text="@string/random_Button"
-    />
+        android:text="@string/random_Button" />
+
     <Button
         android:id="@+id/swapView"
         android:layout_width="wrap_content"
@@ -26,58 +24,65 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:text="@string/swap_View"
-        />
+        android:text="@string/swap_View" />
+
+    <Button
+        android:id="@+id/settingsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/swapView"
+        android:layout_toStartOf="@+id/swapView"
+        android:layout_toRightOf="@+id/generateDungeonButton"
+        android:layout_toEndOf="@+id/generateDungeonButton"
+        android:text="@string/settings" />
 
     <EditText
-        android:visibility="gone"
         android:id="@+id/outPut"
-        android:layout_centerVertical="true"
-        android:text=""
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_above="@+id/generateDungeonButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    />
+        android:layout_above="@+id/generateDungeonButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:inputType="none"
+        android:text=""
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/roomTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="TEST 123"
         android:textAlignment="center"
-        android:textSize="30dp"
-    />
+        android:inputType="none"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/roomDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/roomTitle"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/roomTitle"
-        android:text="This is a description, this room is going to be described so great here it will be simply amazing. great stuff."
-    />
+        android:inputType="none"
+        android:text="This is a description, this room is going to be described so great here it will be simply amazing. great stuff." />
 
     <HorizontalScrollView
+        android:id="@+id/roomsScroller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/generateDungeonButton"
-        android:id="@+id/roomsScroller"
-        >
+        android:layout_above="@+id/generateDungeonButton">
 
         <LinearLayout
             android:id="@+id/RoombuttonsLayout"
@@ -89,4 +94,103 @@
 
         </LinearLayout>
     </HorizontalScrollView>
+
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/generateDungeonButton"
+        android:id="@+id/settingsView"
+        android:visibility="gone"
+        android:background="@color/settingsColorBackground"
+        >
+
+        <EditText
+            android:id="@+id/numberOfConnections"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="138dp"
+            android:ems="5"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/numberOfConnectionsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/numberOfConnections"
+            android:layout_marginStart="150dp"
+            android:layout_marginLeft="150dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:inputType="none"
+            android:text="@string/numberOfConnections"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/numberOfSecretConnections"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/numberOfConnections"
+            android:layout_marginTop="75dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:ems="5"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/numberOfSecretConnectionsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/numberOfSecretConnections"
+            android:layout_below="@+id/numberOfConnectionsLabel"
+            android:layout_marginStart="150dp"
+            android:layout_marginLeft="150dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:inputType="none"
+            android:text="@string/secretConnections"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/numberOfLevels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="5"
+        android:layout_below="@+id/numberOfSecretConnections"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="80dp"
+        android:inputType="number" />
+
+        <TextView
+            android:id="@+id/numberOfLevelsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="150dp"
+            android:layout_marginLeft="150dp"
+            android:layout_marginEnd="47dp"
+            android:layout_marginRight="47dp"
+            android:layout_alignTop="@+id/numberOfLevels"
+            android:inputType="none"
+            android:text="@string/levels"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
 </RelativeLayout>
